@@ -97,9 +97,22 @@ jobs:
           cp -r "$APP_PATH" build/Payload/
           cd build
           zip -r "${{ inputs.ipa_name }}.ipa" Payload
+      - name: Set artifact path
+        id: artifact
+        shell: bash
+        run: |
+          APP_DIR="${{ inputs.app_dir }}"
+          APP_DIR="${APP_DIR#./}"
+          if [ "$APP_DIR" = "." ] || [ -z "$APP_DIR" ]; then
+            APP_DIR="target"
+          else
+            APP_DIR="target/$APP_DIR"
+          fi
+          echo "path=$APP_DIR/build/${{ inputs.ipa_name }}.ipa" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.ipa_name }}
-          path: target/${{ inputs.app_dir }}/build/${{ inputs.ipa_name }}.ipa
+          path: ${{ steps.artifact.outputs.path }}
           retention-days: 14
+
