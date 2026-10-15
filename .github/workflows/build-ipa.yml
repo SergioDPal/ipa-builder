@@ -3,9 +3,6 @@ name: Build unsigned iOS IPA
 on:
   workflow_dispatch:
     inputs:
-      repo:
-        description: "Repo a compilar (owner/nombre), ej: adro0303/mcqueens-web"
-        required: true
       ref:
         description: "Rama, tag o commit"
         required: false
@@ -27,7 +24,7 @@ jobs:
       - name: Checkout target project
         uses: actions/checkout@v4
         with:
-          repository: ${{ inputs.repo }}
+          repository: SergioDPal/Temufy
           ref: ${{ inputs.ref }}
           token: ${{ secrets.CROSS_REPO_TOKEN }}
           path: target
